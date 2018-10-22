@@ -1,7 +1,3 @@
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Date;
-
 import quickfix.Application;
 import quickfix.ConfigError;
 import quickfix.DefaultMessageFactory;
@@ -29,41 +25,40 @@ import quickfix.field.OrdType;
 import quickfix.field.Side;
 import quickfix.field.Symbol;
 import quickfix.field.TransactTime;
-import quickfix.field.TransactTime;
 import quickfix.fix42.NewOrderSingle;
 
 public class ClientApplication implements Application {
 	private static volatile SessionID sessionID;
 
 	public void onCreate(SessionID sessionID) {
-		System.out.println("OnCreate !!!");
+		System.out.println("client OnCreate !!!");
 	}
 
 	public void onLogon(SessionID sessionID) {
-		System.out.println("OnLogon");
+		System.out.println(" client OnLogon");
 		ClientApplication.sessionID = sessionID;
 	}
 
 	public void onLogout(SessionID sessionID) {
-		System.out.println("OnLogout");
+		System.out.println(" client OnLogout");
 		ClientApplication.sessionID = null;
 	}
 
 	public void toAdmin(Message message, SessionID sessionID) {
-		System.out.println("ToAdmin");
+		System.out.println(" client ToAdmin");
 	}
 
 	public void fromAdmin(Message message, SessionID sessionID) throws FieldNotFound, IncorrectDataFormat, IncorrectTagValue, RejectLogon {
-		System.out.println("FromAdmin");
+		System.out.println(" client FromAdmin");
 	}
 
 	public void toApp(Message message, SessionID sessionID) throws DoNotSend {
-		System.out.println("ToApp: " + message);
+		System.out.println(" client ToApp: " + message);
 	}
 
 	public void fromApp(Message message, SessionID sessionID) throws FieldNotFound, IncorrectDataFormat, IncorrectTagValue,
 			UnsupportedMessageType {
-		System.out.println("FromApp");
+		System.out.println(" client FromApp");
 	}
 
 	public static void main(String[] args) throws ConfigError, InterruptedException, SessionNotFound {
@@ -81,9 +76,9 @@ public class ClientApplication implements Application {
 		NewOrderSingle newOrder = new NewOrderSingle(
 				new ClOrdID("CLIENT_ORDER_ID"),
 				new HandlInst('1'),
-				new Symbol("4"),
+				new Symbol("BTCUSD"),
 				new Side(Side.BUY),
-					new TransactTime(),
+				new TransactTime(),
 				new OrdType(OrdType.MARKET));
 		Session.sendToTarget(newOrder, sessionID);
 		Thread.sleep(5000);
